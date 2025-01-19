@@ -1,23 +1,31 @@
-const express= require('express');
-const UrlRoute=require('./routes/routes')
+const express = require('express');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+const cors = require('cors'); // Import CORS middleware
+const UrlRoute=require("./routes/routes");
+
 const app = express();
-require('dotenv').config();
-const connectDB = require('./db/connect');
-const port = process.env.PORT || 3000;
-const start = async () => {
-    try {
-      await connectDB(process.env.mongo_url);
-      console.log('connect to DB')
-      app.listen(port, () =>
-        console.log(`Server is listening on port ${port}...`)
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
-app.use(express.urlencoded({extended:false}))
+
+dotenv.config();
+
+// Middleware
+app.use(cors()); // Enable CORS
 app.use(express.json());
-  app.use("/complain",UrlRoute);
-  
-  
-  start();
+app.use(express.urlencoded({ extended: false }));
+
+// Routes
+app.use("/complain",UrlRoute)
+
+// Database connection and server start
+const start = async () => {
+  try {
+    await mongoose.connect(process.env.mongo_url, { useNewUrlParser: true, useUnifiedTopology: true });
+    console.log('Connected to MongoDB');
+    app.listen(process.env.PORT || 3000, () => console.log('Server running on port 3000'));
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+start();
+    

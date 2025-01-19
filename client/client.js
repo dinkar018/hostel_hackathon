@@ -45,8 +45,9 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         })
         .catch((err) => alert('Error submitting form.'),
-           
-    );
+    console.log(err));
     });
   });
+  
+  
   

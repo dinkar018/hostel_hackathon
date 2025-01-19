@@ -74,7 +74,7 @@ const createComplain = async (req,res)=>{
 
     res.status(201).json({task})
     } catch(error){
-        res.status(500).json({msg: error})
+        res.status(500).json(error)
     }
 }
 

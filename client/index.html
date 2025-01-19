@@ -4,10 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hostel Maintenance System</title>
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-  >
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
   <header class="bg-dark text-white text-center py-3">
@@ -42,7 +39,7 @@
       <!-- Room Number -->
       <div class="mb-3">
         <label for="roomno" class="form-label">Room Number</label>
-        <input type="text" class="form-control" id="roomno" name="contact" placeholder="Ex. F103 / G110" required>
+        <input type="text" class="form-control" id="roomno" name="roomNumber" placeholder="Ex. F103 / G110" required>
       </div>
 
       <!-- Complaint Domain Dropdown -->
@@ -74,7 +71,7 @@
       <!-- Availability Time -->
       <div class="mb-3">
         <label for="availability" class="form-label">Your Availability Time</label>
-        <input type="text" class="form-control" id="availability" name="Time" placeholder="Ex. 2 p.m to 4 p.m" required>
+        <input type="text" class="form-control" id="availability" name="availabilityTime" placeholder="Ex. 2 p.m to 4 p.m" required>
       </div>
 
       <!-- Submit and Reset Buttons -->
@@ -82,14 +79,67 @@
         <button type="submit" class="btn btn-primary">Submit</button>
         <button type="reset" class="btn btn-secondary">Reset</button>
       </div>
-    </form>
+    </form> 
   </div>
 
   <footer class="bg-dark text-white text-center py-3 mt-5">
     <p class="mb-1">Copyright © 2025 VNIT Nagpur.</p>
   </footer>
 
-  <script src="client.js"></script>
+  <script>
+    document.getElementById('maintenanceForm').addEventListener('submit', async function(event) {
+      event.preventDefault();
+      const formData = {
+        id: document.getElementById('username').value,
+        hostel: document.getElementById('hostelname').value,
+        roomNumber: document.getElementById('roomno').value,
+        domain: document.getElementById('domain').value,
+        subdomain: document.getElementById('subdomain').value,
+        details: document.getElementById('complaintDetails').value,
+        availabilityTime: document.getElementById('availability').value,
+      };
+
+      try {
+        const response = await fetch('http://localhost:3000/complain', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+
+        if (response.ok) {
+          alert('Request submitted successfully!');
+        } else {
+          alert('Failed to submit request.');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while submitting the request.');
+
+      }
+    });
+
+    document.getElementById('domain').addEventListener('change', function() {
+      var subdomain = document.getElementById('subdomain');
+      subdomain.innerHTML = '<option value="" disabled selected>Choose Subdomain</option>';
+      var options = [];
+      if (this.value === 'civil') {
+        options = ['Structural', 'Masonry', 'Concrete'];
+      } else if (this.value === 'electrical') {
+        options = ['Wiring', 'Appliances'];
+      } else if (this.value === 'watercooler') {
+        options = ['Dispenser', 'Cooling'];
+      } else if (this.value === 'plumbing') {
+        options = ['Pipes', 'Fixtures'];
+      }
+      for (var i = 0; i < options.length; i++) {
+        var opt = document.createElement('option');
+        opt.value = options[i];
+        opt.innerHTML = options[i];
+        subdomain.appendChild(opt);
+      }
+    });
+  </script>
 </body>
 </html>
-
