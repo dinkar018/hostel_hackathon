@@ -41,7 +41,10 @@
         <label for="roomno" class="form-label">Room Number</label>
         <input type="text" class="form-control" id="roomno" name="roomNumber" placeholder="Ex. F103 / G110" required>
       </div>
-
+      <div class="mb-3">
+        <label for="contact" class="form-label">Contact Number</label>
+        <input type="text" class="form-control" id="contact" name="contact" placeholder="Enter your contact number" required>
+      </div>
       <!-- Complaint Domain Dropdown -->
       <div class="mb-3">
         <label for="domain" class="form-label">Complaint Domain</label>
@@ -67,7 +70,15 @@
         <label for="complaintDetails" class="form-label">Complaint Details</label>
         <textarea class="form-control" id="complaintDetails" name="details" rows="4" placeholder="Enter the details of the complaint" required></textarea>
       </div>
-
+      <div class="mb-3">
+        <label for="urgency" class="form-label">Urgency Level</label>
+        <select class="form-select" id="urgency" name="urgency" required>
+          <option selected disabled>Choose Urgency Level</option>
+          <option value="Low">Low</option>
+          <option value="Medium">Medium</option>
+          <option value="High">High</option>
+        </select>
+      </div>
       <!-- Availability Time -->
       <div class="mb-3">
         <label for="availability" class="form-label">Your Availability Time</label>
@@ -79,6 +90,12 @@
         <button type="submit" class="btn btn-primary">Submit</button>
         <button type="reset" class="btn btn-secondary">Reset</button>
       </div>
+      <!-- Contact Number -->
+
+
+<!-- Complaint Urgency -->
+
+
     </form> 
   </div>
 
@@ -87,59 +104,83 @@
   </footer>
 
   <script>
+    document.addEventListener('DOMContentLoaded', () => {
+  const domainDropdown = document.getElementById('domain');
+  const subdomainDropdown = document.getElementById('subdomain');
+
+  // Mapping domains to their respective subdomains
+  const domainSubdomainMap = {
+    civil: [
+      { value: 'wallcrack', text: 'Wall Crack' },
+      { value: 'roofleak', text: 'Roof Leakage' },
+      { value: 'floorissues', text: 'Floor Issues' },
+    ],
+    electrical: [
+      { value: 'poweroutage', text: 'Power Outage' },
+      { value: 'lighting', text: 'Lighting Issues' },
+      { value: 'shortcircuit', text: 'Short Circuit' },
+    ],
+    watercooler: [
+      { value: 'notcooling', text: 'Not Cooling' },
+      { value: 'leakage', text: 'Water Leakage' },
+      { value: 'noiseissue', text: 'Noise Issue' },
+    ],
+    plumbing: [
+      { value: 'pipeleak', text: 'Pipe Leakage' },
+      { value: 'cloggeddrain', text: 'Clogged Drain' },
+      { value: 'faucetissues', text: 'Faucet Issues' },
+    ],
+  };
+
+  // Update subdomain options based on selected domain
+  domainDropdown.addEventListener('change', () => {
+    const domain = domainDropdown.value;
+    subdomainDropdown.innerHTML = '<option selected disabled>Choose Subdomain</option>'; // Reset subdomain options
+
+    if (domainSubdomainMap[domain]) {
+      domainSubdomainMap[domain].forEach((sub) => {
+        const option = document.createElement('option');
+        option.value = sub.value;
+        option.textContent = sub.text;
+        subdomainDropdown.appendChild(option);
+      });
+    }
+  });
+});
+
     document.getElementById('maintenanceForm').addEventListener('submit', async function(event) {
-      event.preventDefault();
-      const formData = {
-        id: document.getElementById('username').value,
-        hostel: document.getElementById('hostelname').value,
-        roomNumber: document.getElementById('roomno').value,
-        domain: document.getElementById('domain').value,
-        subdomain: document.getElementById('subdomain').value,
-        details: document.getElementById('complaintDetails').value,
-        availabilityTime: document.getElementById('availability').value,
-      };
+  event.preventDefault();
+  const formData = {
+    id: document.getElementById('username').value,
+    hostel: document.getElementById('hostelname').value,
+    roomNumber: document.getElementById('roomno').value,
+    contact: document.getElementById('contact').value,
+    domain: document.getElementById('domain').value,
+    subdomain: document.getElementById('subdomain').value,
+    details: document.getElementById('complaintDetails').value,
+    urgency: document.getElementById('urgency').value,
+    Time: document.getElementById('availability').value,
+  };
 
-      try {
-        const response = await fetch('http://localhost:3000/complain', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData),
-        });
-
-        if (response.ok) {
-          alert('Request submitted successfully!');
-        } else {
-          alert('Failed to submit request.');
-        }
-      } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred while submitting the request.');
-
-      }
+  try {
+    const response = await fetch('http://localhost:3000/complain', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
     });
 
-    document.getElementById('domain').addEventListener('change', function() {
-      var subdomain = document.getElementById('subdomain');
-      subdomain.innerHTML = '<option value="" disabled selected>Choose Subdomain</option>';
-      var options = [];
-      if (this.value === 'civil') {
-        options = ['Structural', 'Masonry', 'Concrete'];
-      } else if (this.value === 'electrical') {
-        options = ['Wiring', 'Appliances'];
-      } else if (this.value === 'watercooler') {
-        options = ['Dispenser', 'Cooling'];
-      } else if (this.value === 'plumbing') {
-        options = ['Pipes', 'Fixtures'];
-      }
-      for (var i = 0; i < options.length; i++) {
-        var opt = document.createElement('option');
-        opt.value = options[i];
-        opt.innerHTML = options[i];
-        subdomain.appendChild(opt);
-      }
-    });
+    if (response.ok) {
+      alert('Request submitted successfully!');
+    } else {
+      alert('Failed to submit request.');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    alert('An error occurred while submitting the request.');
+  }
+});
   </script>
 </body>
 </html>

@@ -3,78 +3,117 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Submitted Requests</title>
+  <title>Hostel Maintenance Complaints</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-  <header class="bg-dark text-white text-center py-3">
-    <h2>Submitted Maintenance Requests</h2>
+  <header>
+    <h2 class="bg-dark text-white text-center py-3">Hostel Maintenance Complaints</h2>
   </header>
-
-  <nav class="menu bg-dark text-center py-2">
-    <a href="index.html" class="text-white mx-3">Submit New Request</a>
-    <a href="active.html" class="text-white mx-3">View Submitted Requests</a>
-  </nav>
-
+  
   <div class="container mt-5">
-    <h3 class="text-center mb-4">List of Submitted Requests</h3>
-    <table class="table table-bordered table-striped">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h3>List of Complaints</h3>
+      <!-- Filter Dropdown -->
+      <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          Filter by Domain
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+          <li><button class="dropdown-item" onclick="fetchDomainComplaints('all')">Show All</button></li>
+          <li><button class="dropdown-item" onclick="fetchDomainComplaints('civil')">Civil</button></li>
+          <li><button class="dropdown-item" onclick="fetchDomainComplaints('electrical')">Electrical</button></li>
+          <li><button class="dropdown-item" onclick="fetchDomainComplaints('watercooler')">Water Cooler</button></li>
+          <li><button class="dropdown-item" onclick="fetchDomainComplaints('plumbing')">Plumbing</button></li>
+        </ul>
+      </div>
+    </div>
+
+    <table class="table table-striped">
       <thead>
         <tr>
-          <th>#</th>
           <th>Student ID</th>
           <th>Hostel</th>
-          <th>Room</th>
+          <th>Room No</th>
           <th>Domain</th>
           <th>Subdomain</th>
           <th>Details</th>
           <th>Availability</th>
         </tr>
       </thead>
-      <tbody id="requestTableBody">
-        <!-- Rows will be dynamically populated -->
+      <tbody id="complaintList">
+        <!-- Complaints will be loaded here dynamically -->
       </tbody>
     </table>
   </div>
 
-  <!-- Bootstrap JS Bundle -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+  <footer class="bg-dark text-white text-center py-3 mt-5">
+    <p>Copyright © 2025 VNIT Nagpur.</p>
+  </footer>
 
-  <!-- JavaScript to Fetch and Populate Table -->
   <script>
-    // Fetch data from the backend API
-    fetch('http://localhost:5000/get-requests') // Use the correct URL of your backend
-      .then(response => response.json())
-      .then(requests => {
-        const tableBody = document.getElementById('requestTableBody');
-        
-        // Check if there are any requests
-        if (requests.length === 0) {
-          const row = document.createElement('tr');
-          row.innerHTML = `<td colspan="8" class="text-center">No requests submitted yet.</td>`;
-          tableBody.appendChild(row);
+    // Function to fetch and display complaints for a specific domain or all domains
+    async function fetchDomainComplaints(domain) {
+      try {
+        let url = 'http://localhost:3000/complain/all'; // Default API URL for all complaints
+        if (domain !== 'all') {
+          url = `http://localhost:3000/complain/${domain}`; // API URL for specific domain
         }
 
-        // Populate the table with the requests from MongoDB
-        requests.forEach((request, index) => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${index + 1}</td>
-            <td>${request.studentId}</td>
-            <td>${request.hostel}</td>
-            <td>${request.room}</td>
-            <td>${request.domain}</td>
-            <td>${request.subdomain}</td>
-            <td>${request.details}</td>
-            <td>${request.availability}</td>
-          `;
-          tableBody.appendChild(row);
-        });
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('Failed to fetch requests!');
+        const response = await fetch(url); // Fetch data from the backend
+        if (!response.ok) {
+          throw new Error(`Failed to fetch complaints for ${domain}`);
+        }
+
+        const data = await response.json(); // Parse the response JSON
+
+        // Ensure the response format matches your expectation
+        const complaints = data.tasks || []; // Use `data.tasks` if it exists, otherwise default to an empty array
+
+        displayComplaints(complaints);
+      } catch (error) {
+        console.error('Error fetching complaints:', error);
+        document.getElementById('complaintList').innerHTML = `
+          <tr>
+            <td colspan="7" class="text-center text-danger">
+              Error loading complaints${domain !== 'all' ? ` for domain ${domain}` : ''}.
+            </td>
+          </tr>`;
+      }
+    }
+
+    // Function to display complaints in the table
+    function displayComplaints(complaints) {
+      const complaintList = document.getElementById('complaintList');
+      complaintList.innerHTML = ''; // Clear the table body
+
+      if (complaints.length === 0) {
+        complaintList.innerHTML = `
+          <tr>
+            <td colspan="7" class="text-center text-warning">No complaints found.</td>
+          </tr>`;
+        return;
+      }
+
+      complaints.forEach(complaint => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${complaint.id}</td>
+          <td>${complaint.hostel}</td>
+          <td>${complaint.roomNumber}</td>
+          <td>${complaint.domain}</td>
+          <td>${complaint.subdomain}</td>
+          <td>${complaint.details}</td>
+          <td>${complaint.Time}</td>
+        `;
+        complaintList.appendChild(row);
       });
+    }
+
+    // Fetch all complaints on page load
+    window.onload = () => fetchDomainComplaints('all');
   </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

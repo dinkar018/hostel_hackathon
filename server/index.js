@@ -19,7 +19,7 @@ app.use("/complain",UrlRoute)
 // Database connection and server start
 const start = async () => {
   try {
-    await mongoose.connect(process.env.mongo_url, { useNewUrlParser: true, useUnifiedTopology: true });
+    await mongoose.connect(process.env.mongo_url);
     console.log('Connected to MongoDB');
     app.listen(process.env.PORT || 3000, () => console.log('Server running on port 3000'));
   } catch (error) {
