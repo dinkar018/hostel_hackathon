@@ -40,11 +40,6 @@ Time:{
   required:true,
 }
 
-
-
-
-
-
 })
           
 module.exports= mongoose.model("user",userSchema);

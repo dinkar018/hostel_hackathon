@@ -1,4 +1,5 @@
 const express= require('express');
+const UrlRoute=require('./routes/routes')
 const app = express();
 require('dotenv').config();
 const connectDB = require('./db/connect');
@@ -14,5 +15,9 @@ const start = async () => {
       console.log(error);
     }
   };
+app.use(express.urlencoded({extended:false}))
+app.use(express.json());
+  app.use("/complain",UrlRoute);
+  
   
   start();
