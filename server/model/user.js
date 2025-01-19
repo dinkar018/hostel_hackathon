@@ -27,7 +27,19 @@ details:{
 urgency:{
    type:String,
    required:true,
+
+},
+
+subdomain:{
+    type:String,
+    
+},
+
+Time:{
+  type:String,
+  required:true,
 }
+
 
 
 
@@ -35,7 +47,7 @@ urgency:{
 
 })
           
-
+module.exports= mongoose.model("user",userSchema);
 
 
 
