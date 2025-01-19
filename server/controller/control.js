@@ -1,4 +1,4 @@
-const Task = require('../models/user')
+const Task = require('../model/user')
 
 const getAllComplains= async (req,res)=>{
     try{
@@ -20,7 +20,7 @@ const createComplain = async (req,res)=>{
         details:body.details,
         urgency:body.urgency,
         subdomain:body.subdomain,
-        Time:body.time,
+        Time:body.Time,
 
     })
 
