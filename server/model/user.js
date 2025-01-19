@@ -1,3 +1,12 @@
 const mongoose = require("mongoose");
 
-const schema = 
+const userSchema = new mongoose.chema{(
+           id:{
+            type:String;
+            unique:true;
+           }
+
+
+
+
+)}
