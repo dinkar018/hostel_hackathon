@@ -195,38 +195,27 @@
     };
 
     // Send data to backend API
-    fetch('http://localhost:3000/complain', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify(request), // Ensure request is valid JSON
-})
-  .then(response => {
-    if (!response.ok) {
-      // Log response details if there's an issue
-      console.error(`HTTP error! Status: ${response.status}`);
-      return response.text().then(text => {
-        console.error('Response Text:', text); // Log the response text for debugging
-        throw new Error(`HTTP Error: ${response.status}`);
-      });
-    }
-    return response.json(); // Parse the JSON response if successful
-  })
-  .then(data => {
-    console.log('Response from server:', data); // Log the server response
-    if (data.success) {
-      console.log('Request submitted successfully!');
-      form.reset(); // Reset the form after submission
-      complaintDetailsTextarea.disabled = true; // Disable the textarea
-    } else {
-      console.log('Request failed on the server. Check server response.');
-    }
-  })
-  .catch(error => {
-    console.error('Error occurred:', error); // Log the error
-  });
-
+    fetch('http://localhost:5000/submit-request', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(request)
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        alert('Your request has been submitted successfully!');
+        form.reset(); // Reset the form after submission
+        complaintDetailsTextarea.disabled = true; // Disable the textarea after submission
+      } else {
+        alert('Failed to submit the request. Please try again.');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Failed to submit the request. Please try again.');
+    });
   });
   </script>
 </body>
