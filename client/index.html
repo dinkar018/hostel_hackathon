@@ -113,7 +113,7 @@
   <script>
     const domainDropdown = document.getElementById('domain');
     const subdomainDropdown = document.getElementById('subdomain');
-    const complaintDetailsTextarea = document.getElementById('complaintDetails');
+   
 
     // Event listener for domain and subdomain dropdowns
     domainDropdown.addEventListener('change', updateSubdomainOptions);
@@ -176,11 +176,47 @@
       complaintDetailsTextarea.value = '';
     });
 
-    // Submit form handler
-    document.getElementById('maintenanceForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      
+    const form = document.getElementById('maintenanceForm');
+  const complaintDetailsTextarea = document.getElementById('complaintDetails');
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    // Gather form data
+    const formData = new FormData(form);
+    const request = {
+      studentId: formData.get('username'),
+      hostel: formData.get('hostelname'),
+      room: formData.get('roomno'),
+      domain: formData.get('domain'),
+      subdomain: formData.get('subdomain'),
+      details: formData.get('complaintDetails'),
+      availability: formData.get('availability')
+    };
+
+    // Send data to backend API
+    fetch('http://localhost:5000/submit-request', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(request)
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        alert('Your request has been submitted successfully!');
+        form.reset(); // Reset the form after submission
+        complaintDetailsTextarea.disabled = true; // Disable the textarea after submission
+      } else {
+        alert('Failed to submit the request. Please try again.');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Failed to submit the request. Please try again.');
     });
+  });
   </script>
 </body>
 </html>
