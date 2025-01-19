@@ -10,52 +10,45 @@
   >
 </head>
 <body>
-    <header class="bg-dark text-white text-center py-3 "><h2>Hostel Maintenance Request System</h2></header>
+  <header class="bg-dark text-white text-center py-3">
+    <h2>Hostel Maintenance Request System</h2>
+  </header>
   <div class="container mt-5">
-    
     <form id="maintenanceForm">
       <!-- Student ID -->
       <div class="mb-3">
         <label for="username" class="form-label">Student Id</label>
-        <input type="text" class="form-control" id="username" placeholder="Enter your username" required>
+        <input type="text" class="form-control" id="username" name="id" placeholder="Enter your ID" required>
       </div>
 
       <!-- Hostel Name Dropdown -->
-<!-- 
-      
-      <div class="mb-3">
-        <label for="password" class="form-label">Password</label>
-        <input type="password" class="form-control" id="password" placeholder="Enter your password">
-      </div> -->
-
-      <!-- Dropdown -->
       <div class="mb-3">
         <label for="hostelname" class="form-label">Select your Hostel</label>
-        <select class="form-select" id="hostelname" required>
+        <select class="form-select" id="hostelname" name="hostel" required>
           <option selected disabled>Choose Hostel Name</option>
-          <option value="1">Aryabhatta</option>
-          <option value="2">S. Ramanujan</option>
-          <option value="3">M. S. Swaminathan</option>
-          <option value="4">V. G. Bhide</option>
-          <option value="5">A. P. J. Abdul Kalam</option>
-          <option value="6">C. V. Raman</option>
-          <option value="7">Homi J. Bhabha</option>
-          <option value="8">J. C. Bose</option>
-          <option value="9">Meghnad Saha</option>
-          <option value="10">Vikram Sarabhai</option>
+          <option value="Aryabhatta">Aryabhatta</option>
+          <option value="S. Ramanujan">S. Ramanujan</option>
+          <option value="M. S. Swaminathan">M. S. Swaminathan</option>
+          <option value="V. G. Bhide">V. G. Bhide</option>
+          <option value="A. P. J. Abdul Kalam">A. P. J. Abdul Kalam</option>
+          <option value="C. V. Raman">C. V. Raman</option>
+          <option value="Homi J. Bhabha">Homi J. Bhabha</option>
+          <option value="J. C. Bose">J. C. Bose</option>
+          <option value="Meghnad Saha">Meghnad Saha</option>
+          <option value="Vikram Sarabhai">Vikram Sarabhai</option>
         </select>
       </div>
 
       <!-- Room Number -->
       <div class="mb-3">
         <label for="roomno" class="form-label">Room Number</label>
-        <input type="text" class="form-control" id="roomno" placeholder="Ex. F103 / G110" required>
+        <input type="text" class="form-control" id="roomno" name="contact" placeholder="Ex. F103 / G110" required>
       </div>
 
       <!-- Complaint Domain Dropdown -->
       <div class="mb-3">
         <label for="domain" class="form-label">Complaint Domain</label>
-        <select class="form-select" id="domain" required>
+        <select class="form-select" id="domain" name="domain" required>
           <option selected disabled>Choose Domain</option>
           <option value="civil">Civil</option>
           <option value="electrical">Electrical</option>
@@ -67,27 +60,21 @@
       <!-- Subdomain Dropdown -->
       <div class="mb-3">
         <label for="subdomain" class="form-label">Complaint Subdomain</label>
-        <select class="form-select" id="subdomain" required>
+        <select class="form-select" id="subdomain" name="subdomain" required>
           <option selected disabled>Choose Subdomain</option>
         </select>
       </div>
 
-      <!-- Complaint Details Textarea -->
+      <!-- Complaint Details -->
       <div class="mb-3">
         <label for="complaintDetails" class="form-label">Complaint Details</label>
-        <textarea class="form-control" id="complaintDetails" rows="4" placeholder="Enter the details of the complaint" required></textarea>
+        <textarea class="form-control" id="complaintDetails" name="details" rows="4" placeholder="Enter the details of the complaint" required></textarea>
       </div>
 
       <!-- Availability Time -->
       <div class="mb-3">
         <label for="availability" class="form-label">Your Availability Time</label>
-        <input type="text" class="form-control" id="availability" placeholder="Ex. 2 p.m to 4 p.m" required>
-      </div>
-
-      <!-- File Upload -->
-      <div class="mb-3">
-        <label for="formFile" class="form-label">Upload File</label>
-        <input class="form-control" type="file" id="formFile">
+        <input type="text" class="form-control" id="availability" name="Time" placeholder="Ex. 2 p.m to 4 p.m" required>
       </div>
 
       <!-- Submit and Reset Buttons -->
@@ -99,124 +86,10 @@
   </div>
 
   <footer class="bg-dark text-white text-center py-3 mt-5">
-    <p class="mb-1"> Copyright © 2025 VNIT Nagpur.</p>
-   
+    <p class="mb-1">Copyright © 2025 VNIT Nagpur.</p>
   </footer>
-  
 
-  <!-- Bootstrap JS Bundle -->
-  <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js">
-  </script>
-
-  <!-- Custom JS -->
-  <script>
-    const domainDropdown = document.getElementById('domain');
-    const subdomainDropdown = document.getElementById('subdomain');
-   
-
-    // Event listener for domain and subdomain dropdowns
-    domainDropdown.addEventListener('change', updateSubdomainOptions);
-    subdomainDropdown.addEventListener('change', function () {
-      complaintDetailsTextarea.disabled = false;
-    });
-
-    function updateSubdomainOptions() {
-      const domain = domainDropdown.value;
-      let subdomainOptions = '';
-
-      if (domain === 'plumbing') {
-        subdomainOptions = `
-          <option value="pipeburst">Pipe Burst</option>
-          <option value="waterleak">Water Leak</option>
-          <option value="clogged">Clogged Drain</option>
-          <option value="lowpressure">Low Water Pressure</option>
-          <option value="toiletblock">Toilet Blockage</option>
-          <option value="waterheater">Water Heater Not Working</option>
-        `;
-      } else if (domain === 'electrical') {
-        subdomainOptions = `
-          <option value="electricshock">Electric Shock</option>
-          <option value="shortcircuit">Short Circuit</option>
-          <option value="poweroutage">Power Outage</option>
-          <option value="lighting">Lighting Issue</option>
-          <option value="fuseblown">Fuse Blown</option>
-          <option value="fan">Fan Not Working</option>
-          <option value="powerfluctuation">Power Fluctuation</option>
-        `;
-      } else if (domain === 'civil') {
-        subdomainOptions = `
-          <option value="wallcrack">Wall Crack</option>
-          <option value="roofleak">Roof Leakage</option>
-          <option value="floordamage">Floor Damage</option>
-          <option value="doorissues">Door Issues</option>
-          <option value="windowissues">Window Issues</option>
-          <option value="furnituredamage">Furniture Damage</option>
-          <option value="ceilingleak">Ceiling Leak</option>
-        `;
-      } else if (domain === 'watercooler') {
-        subdomainOptions = `
-          <option value="coolernotworking">Cooler Not Working</option>
-          <option value="waterleakage">Water Leakage</option>
-          <option value="nocooling">No Cooling</option>
-          <option value="dirtywater">Dirty Water</option>
-          <option value="coolingissues">Cooling Issues</option>
-        `;
-      }
-
-      subdomainDropdown.innerHTML = `
-        <option selected disabled>Choose Subdomain</option>
-        ${subdomainOptions}
-      `;
-    }
-
-    // Optional: Disable complaint details textarea on form reset
-    document.getElementById('maintenanceForm').addEventListener('reset', () => {
-      complaintDetailsTextarea.disabled = true;
-      complaintDetailsTextarea.value = '';
-    });
-
-    const form = document.getElementById('maintenanceForm');
-  const complaintDetailsTextarea = document.getElementById('complaintDetails');
-
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    // Gather form data
-    const formData = new FormData(form);
-    const request = {
-      id: formData.get('username'),
-      hostel: formData.get('hostelname'),
-      contact: formData.get('roomno'),
-      domain: formData.get('domain'),
-      subdomain: formData.get('subdomain'),
-      details: formData.get('complaintDetails'),
-      Time: formData.get('availability')
-    };
-
-    // Send data to backend API
-    fetch('http://localhost:5000/submit-request', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(request)
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        alert('Your request has been submitted successfully!');
-        form.reset(); // Reset the form after submission
-        complaintDetailsTextarea.disabled = true; // Disable the textarea after submission
-      } else {
-        alert('Failed to submit the request. Please try again.');
-      }
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      alert('Failed to submit the request. Please try again.');
-    });
-  });
-  </script>
+  <script src="client.js"></script>
 </body>
 </html>
+
