@@ -43,7 +43,7 @@
   <!-- JavaScript to Fetch and Populate Table -->
   <script>
     // Fetch data from the backend API
-    fetch('http://localhost:5000/get-requests') // Use the correct URL of your backend
+    fetch('http://localhost:3000/complain') // Use the correct URL of your backend
       .then(response => response.json())
       .then(requests => {
         const tableBody = document.getElementById('requestTableBody');
